@@ -5,5 +5,14 @@
 
 int main(){
 
+    FILE * file = fopen("entrada.txt", "r");
+
+    Graph * g = graph_construct(file);
+
+    graph_print(g);
+
+    fclose(file);
+    graph_destroy(g);
+
     return 0;
 }
