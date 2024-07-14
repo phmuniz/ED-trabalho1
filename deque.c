@@ -93,6 +93,10 @@ void * deque_pop_front(Deque *f){
     return val;
 }
 
+int deque_size(Deque *f){
+    return f->size;
+}
+
 void deque_destroy(Deque *f){
     free(f->arr);
     free(f);

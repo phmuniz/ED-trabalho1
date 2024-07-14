@@ -9,7 +9,7 @@ int main(){
 
     Graph * g = graph_construct(file);
 
-    graph_print(g);
+    graph_data(g);
 
     fclose(file);
     graph_destroy(g);

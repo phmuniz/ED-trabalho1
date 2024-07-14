@@ -23,13 +23,17 @@ void dfs_push(void *d, void * item){
 
     deque_push_back(dfs->f, item);
 }
-void dfs_pop(void *d, destroy_fn destroy){
+void *dfs_pop(void *d){
 
     Dfs * dfs = (Dfs *)d;
 
-    void * item = deque_pop_back(dfs->f);
+    return deque_pop_back(dfs->f);
+}
 
-    destroy(item);
+int dfs_size(void *d){
+    Dfs * dfs = (Dfs *)d;
+
+    return deque_size(dfs->f);
 }
 
 void dfs_destroy(void *d){

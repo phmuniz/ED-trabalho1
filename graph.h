@@ -8,6 +8,8 @@ typedef struct Graph Graph;
 
 Graph * graph_construct(FILE * file);
 
+void graph_data(Graph * g);
+
 void graph_destroy(Graph * g);
 
 void graph_print(Graph * g);

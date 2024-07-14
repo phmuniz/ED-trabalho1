@@ -17,6 +17,10 @@ Neighbor * neighbor_construct(FILE * file){
     return n;
 }
 
+int neighbor_idx(Neighbor * n){
+    return n->idx;
+}
+
 void neighbor_destroy(Neighbor * n){
     free(n);
 }
