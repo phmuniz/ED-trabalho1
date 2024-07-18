@@ -6,6 +6,11 @@
 
 typedef struct Graph Graph;
 
+typedef void (*push_fn)(void *, void *);
+typedef void * (*pop_fn)(void *);
+typedef int (*size_fn)(void *);
+typedef void (*destroy_fn)(void *);
+
 Graph * graph_construct(FILE * file);
 
 void graph_data(Graph * g);

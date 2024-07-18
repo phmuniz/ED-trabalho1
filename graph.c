@@ -16,6 +16,10 @@ struct Graph
     int num_cities_visited;
     Vector * cities;
     void * border;
+    push_fn border_push;
+    pop_fn border_pop;
+    size_fn border_size;
+    destroy_fn border_destroy;
 };
 
 Graph * graph_construct(FILE * file){
@@ -36,9 +40,27 @@ Graph * graph_construct(FILE * file){
         vector_push_back(g->cities, c);
     }
 
-    if(!strcmp(g->algorithm, "DFS")) g->border = dfs_construct();
-    if(!strcmp(g->algorithm, "BFS")) g->border = bfs_construct();
-    if(!strcmp(g->algorithm, "UCS")) g->border = ucs_construct(city_cmp);
+    if(!strcmp(g->algorithm, "DFS")){
+        g->border = dfs_construct();
+        g->border_push = dfs_push;
+        g->border_pop = dfs_pop;
+        g->border_size = dfs_size;
+        g->border_destroy = dfs_destroy;
+    } 
+    if(!strcmp(g->algorithm, "BFS")){
+        g->border = bfs_construct();
+        g->border_push = bfs_push;
+        g->border_pop = bfs_pop;
+        g->border_size = bfs_size;
+        g->border_destroy = bfs_destroy;
+    }
+    if(!strcmp(g->algorithm, "UCS")){
+        g->border = ucs_construct(city_cmp);
+        g->border_push = ucs_push;
+        g->border_pop = ucs_pop;
+        g->border_size = ucs_size;
+        g->border_destroy = ucs_destroy;
+    }
     
     return g;
 }
@@ -47,18 +69,14 @@ void graph_data(Graph * g){
 
     City * city_origin = vector_get(g->cities, g->start);
 
-    if(!strcmp(g->algorithm, "DFS")) dfs_push(g->border, city_origin);
-    if(!strcmp(g->algorithm, "BFS")) bfs_push(g->border, city_origin);
-    if(!strcmp(g->algorithm, "UCS")) ucs_push(g->border, city_origin);
+    g->border_push(g->border, city_origin);
 
     City * city_selected;
     int size = 1;
 
     while(size != 0){
 
-        if(!strcmp(g->algorithm, "DFS")) city_selected = (City *)dfs_pop(g->border);
-        if(!strcmp(g->algorithm, "BFS")) city_selected = (City *)bfs_pop(g->border);
-        if(!strcmp(g->algorithm, "UCS")) city_selected = (City *)ucs_pop(g->border);
+        city_selected = (City *)g->border_pop(g->border);
 
         if(city_idx(city_selected) == g->end){
             g->num_cities_visited++;
@@ -80,7 +98,7 @@ void graph_data(Graph * g){
                     if(dist_to_origin_after < dist_to_origin_before){
                         city_set_dad(city_neighbor, city_idx(city_selected));
                         city_set_dist_to_origin(city_neighbor, dist_to_origin_after);
-                        ucs_push(g->border, city_neighbor);
+                        g->border_push(g->border, city_neighbor);
                     }
                 }
 
@@ -88,9 +106,7 @@ void graph_data(Graph * g){
                     city_set_dad(city_neighbor, city_idx(city_selected));
                     city_set_dist_to_origin(city_neighbor, (city_get_dist_to_origin(city_selected) + neighbor_distance(n)));
                     city_set_in_border(city_neighbor);
-                    if(!strcmp(g->algorithm, "DFS")) dfs_push(g->border, city_neighbor);
-                    if(!strcmp(g->algorithm, "BFS")) bfs_push(g->border, city_neighbor);
-                    if(!strcmp(g->algorithm, "UCS")) ucs_push(g->border, city_neighbor);
+                    g->border_push(g->border, city_neighbor);
                 }
             }
 
@@ -99,9 +115,8 @@ void graph_data(Graph * g){
             g->num_cities_visited++;
         }
 
-        if(!strcmp(g->algorithm, "DFS")) size = dfs_size(g->border);
-        if(!strcmp(g->algorithm, "BFS")) size = bfs_size(g->border);
-        if(!strcmp(g->algorithm, "UCS")) size = ucs_size(g->border);
+        size = g->border_size(g->border);
+
     }
 
     if(city_idx(city_selected) == g->end){
@@ -145,9 +160,7 @@ void graph_destroy(Graph * g){
 
     vector_destroy(g->cities);
 
-    if(!strcmp(g->algorithm, "DFS")) dfs_destroy(g->border);
-    if(!strcmp(g->algorithm, "BFS")) bfs_destroy(g->border);
-    if(!strcmp(g->algorithm, "UCS")) ucs_destroy(g->border);
+    g->border_destroy(g->border);
 
     free(g);
 }
