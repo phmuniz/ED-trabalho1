@@ -28,6 +28,14 @@ run:
 	./main < casos_de_teste/ucs/inputs/en6 > casos_de_teste/ucs/outputs/s6
 	./main < casos_de_teste/ucs/inputs/en7 > casos_de_teste/ucs/outputs/s7
 
+	./main < casos_de_teste/astar/inputs/en1 > casos_de_teste/astar/outputs/s1
+	./main < casos_de_teste/astar/inputs/en2 > casos_de_teste/astar/outputs/s2
+	./main < casos_de_teste/astar/inputs/en3 > casos_de_teste/astar/outputs/s3
+	./main < casos_de_teste/astar/inputs/en4 > casos_de_teste/astar/outputs/s4
+	./main < casos_de_teste/astar/inputs/en5 > casos_de_teste/astar/outputs/s5
+	./main < casos_de_teste/astar/inputs/en6 > casos_de_teste/astar/outputs/s6
+	./main < casos_de_teste/astar/inputs/en7 > casos_de_teste/astar/outputs/s7
+
 val:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./main
 

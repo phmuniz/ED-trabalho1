@@ -60,6 +60,13 @@ Graph * graph_construct(FILE * file){
         g->border_size = heap_size;
         g->border_destroy = heap_destroy;
     }
+    if(!strcmp(g->algorithm, "A*")){
+        g->border = heap_constructor(city_cmp_astar);
+        g->border_push = heap_push;
+        g->border_pop = heap_pop;
+        g->border_size = heap_size;
+        g->border_destroy = heap_destroy;
+    }
     
     return g;
 }
@@ -67,6 +74,7 @@ Graph * graph_construct(FILE * file){
 void graph_data(Graph * g){
 
     City * city_origin = vector_get(g->cities, g->start);
+    City * city_destination = vector_get(g->cities, g->end);
 
     g->border_push(g->border, city_origin);
 
@@ -89,7 +97,7 @@ void graph_data(Graph * g){
                 Neighbor * n = city_get_neighbor(city_selected, i);
                 City * city_neighbor = vector_get(g->cities, neighbor_idx(n));
 
-                if(!strcmp(g->algorithm, "UCS") && city_get_in_border(city_neighbor)){
+                if((!strcmp(g->algorithm, "UCS") || !strcmp(g->algorithm, "A*")) && city_get_in_border(city_neighbor)){
 
                     float dist_to_origin_before = city_get_dist_to_origin(city_neighbor);
                     float dist_to_origin_after = city_get_dist_to_origin(city_selected) + neighbor_distance(n);
@@ -104,6 +112,7 @@ void graph_data(Graph * g){
                 else if(!city_viseted(city_neighbor) && !city_get_in_border(city_neighbor)){
                     city_set_dad(city_neighbor, city_idx(city_selected));
                     city_set_dist_to_origin(city_neighbor, (city_get_dist_to_origin(city_selected) + neighbor_distance(n)));
+                    city_set_dist_to_destination(city_neighbor, city_destination);
                     city_set_in_border(city_neighbor);
                     g->border_push(g->border, city_neighbor);
                 }

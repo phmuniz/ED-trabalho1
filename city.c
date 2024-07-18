@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 struct City
 {
@@ -15,6 +16,7 @@ struct City
     int in_border;
     int dad_city;
     float dist_to_origin;
+    float dist_to_destination;
 };
 
 City * city_construct(FILE * file, int idx){
@@ -44,6 +46,18 @@ float city_get_dist_to_origin(City * c){
 
 void city_set_dist_to_origin(City * c, float dist){
     c->dist_to_origin = dist;
+}
+
+float city_get_dist_to_destination(City * c){
+    return c->dist_to_destination;
+}
+
+void city_set_dist_to_destination(City * c, City * dest){
+
+    float a = pow((dest->x - c->x), 2);
+    float b = pow((dest->y - c->y), 2);
+
+    c->dist_to_destination = sqrt(a+b);
 }
 
 int city_get_in_border(City * c){
@@ -128,6 +142,19 @@ int city_cmp(const void *a, const void *b)
     if (city_a->dist_to_origin < city_b->dist_to_origin)
         return 1;
     if (city_a->dist_to_origin > city_b->dist_to_origin)
+        return -1;
+
+    return 0;
+}
+
+int city_cmp_astar(const void *a, const void *b){
+
+    City *city_a = (City *)a;
+    City *city_b = (City *)b;
+
+    if ((city_a->dist_to_origin + city_a->dist_to_destination) < (city_b->dist_to_origin + city_b->dist_to_destination))
+        return 1;
+    if ((city_a->dist_to_origin + city_a->dist_to_destination) > (city_b->dist_to_origin + city_b->dist_to_destination))
         return -1;
 
     return 0;
