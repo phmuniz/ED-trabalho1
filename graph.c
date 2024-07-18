@@ -3,6 +3,7 @@
 #include "neighbor.h"
 #include "vector.h"
 #include "dfs.h"
+#include "bfs.h"
 #include <string.h>
 
 struct Graph
@@ -35,6 +36,7 @@ Graph * graph_construct(FILE * file){
     }
 
     if(!strcmp(g->algorithm, "DFS")) g->border = dfs_construct();
+    if(!strcmp(g->algorithm, "BFS")) g->border = bfs_construct();
     
     return g;
 }
@@ -44,6 +46,7 @@ void graph_data(Graph * g){
     City * city_origin = vector_get(g->cities, g->start);
 
     if(!strcmp(g->algorithm, "DFS")) dfs_push(g->border, city_origin);
+    if(!strcmp(g->algorithm, "BFS")) bfs_push(g->border, city_origin);
 
     City * city_selected;
     int size = 1;
@@ -51,6 +54,7 @@ void graph_data(Graph * g){
     while(size != 0){
 
         if(!strcmp(g->algorithm, "DFS")) city_selected = (City *)dfs_pop(g->border);
+        if(!strcmp(g->algorithm, "BFS")) city_selected = (City *)bfs_pop(g->border);
 
         if(city_idx(city_selected) == g->end){
             g->num_cities_visited++;
@@ -69,6 +73,7 @@ void graph_data(Graph * g){
                     city_set_dist_to_origin(city_neighbor, (city_get_dist_to_origin(city_selected) + neighbor_distance(n)));
                     city_set_in_border(city_neighbor);
                     if(!strcmp(g->algorithm, "DFS")) dfs_push(g->border, city_neighbor);
+                    if(!strcmp(g->algorithm, "BFS")) bfs_push(g->border, city_neighbor);
                 }
             }
 
@@ -76,7 +81,7 @@ void graph_data(Graph * g){
             g->num_cities_visited++;
         }
 
-        if(!strcmp(g->algorithm, "DFS")) size = dfs_size(g->border);
+        if(!strcmp(g->algorithm, "BFS")) size = bfs_size(g->border);
     }
 
     if(city_idx(city_selected) == g->end){
@@ -121,6 +126,7 @@ void graph_destroy(Graph * g){
     vector_destroy(g->cities);
 
     if(!strcmp(g->algorithm, "DFS")) dfs_destroy(g->border);
+    if(!strcmp(g->algorithm, "BFS")) bfs_destroy(g->border);
 
     free(g);
 }
