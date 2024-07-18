@@ -48,7 +48,9 @@ Deque *deque_construct(){
     return f;
 }
 
-void deque_push_back(Deque *f, void * item){
+void deque_push_back(void * d, void * item){
+
+    Deque * f = (Deque*)d;
 
     if(f->size >= f->allocated){
         deque_realloc(f);
@@ -59,7 +61,9 @@ void deque_push_back(Deque *f, void * item){
     f->size++;
 }
 
-void deque_push_front(Deque *f, void * item){
+void deque_push_front(void * d, void * item){
+
+    Deque * f = (Deque*)d;
 
     if(f->size >= f->allocated){
         deque_realloc(f);
@@ -74,7 +78,9 @@ void deque_push_front(Deque *f, void * item){
     f->size++;
 }
 
-void * deque_pop_back(Deque *f){
+void * deque_pop_back(void * d){
+
+    Deque * f = (Deque*)d;
 
     if(f->end == 0){
         f->end = f->allocated - 1;
@@ -85,7 +91,9 @@ void * deque_pop_back(Deque *f){
     return f->arr[f->end];
 }
 
-void * deque_pop_front(Deque *f){
+void * deque_pop_front(void * d){
+
+    Deque * f = (Deque*)d;
 
     void * val = f->arr[f->start];
     f->start = (f->start + 1) % f->allocated;
@@ -93,11 +101,13 @@ void * deque_pop_front(Deque *f){
     return val;
 }
 
-int deque_size(Deque *f){
+int deque_size(void * d){
+    Deque * f = (Deque*)d;
     return f->size;
 }
 
-void deque_destroy(Deque *f){
+void deque_destroy(void * d){
+    Deque * f = (Deque*)d;
     free(f->arr);
     free(f);
 }

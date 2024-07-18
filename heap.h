@@ -5,10 +5,10 @@
 typedef struct Heap Heap;
 
 Heap *heap_constructor(int (*cmp_fn)(const void *, const void *));
-void heap_push(Heap *heap, void *data);
-int heap_size(Heap *heap);
-void *heap_pop(Heap *heap);
-void heap_destroy(Heap *heap);
-void * heap_get(Heap *heap, int i);
+void heap_push(void * h, void *data);
+int heap_size(void * h);
+void *heap_pop(void * h);
+void heap_destroy(void * h);
+void * heap_get(void * h, int i);
 
 #endif

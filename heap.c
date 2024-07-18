@@ -21,7 +21,9 @@ Heap *heap_constructor(int (*cmp_fn)(const void *, const void *)){
     return h;
 }
 
-void heap_push(Heap *heap, void *data){
+void heap_push(void * h, void *data){
+
+    Heap * heap = (Heap*)h;
 
     int idx_dad;
 
@@ -45,11 +47,14 @@ void heap_push(Heap *heap, void *data){
     }
 }
 
-int heap_size(Heap *heap){
+int heap_size(void * h){
+    Heap * heap = (Heap*)h;
     return vector_size(heap->data);
 }
 
-void *heap_pop(Heap *heap){
+void *heap_pop(void * h){
+
+    Heap * heap = (Heap*)h;
 
     vector_swap(heap->data, 0, vector_size(heap->data) - 1);
 
@@ -87,13 +92,17 @@ void *heap_pop(Heap *heap){
     return value;
 }
 
-void heap_destroy(Heap *heap){
+void heap_destroy(void * h){
+
+    Heap * heap = (Heap*)h;
 
     vector_destroy(heap->data);
     free(heap);
 }
 
-void * heap_get(Heap *heap, int i){
+void * heap_get(void * h, int i){
+
+    Heap * heap = (Heap*)h;
 
     return vector_get(heap->data, i);
 }

@@ -2,9 +2,8 @@
 #include "city.h"
 #include "neighbor.h"
 #include "vector.h"
-#include "dfs.h"
-#include "bfs.h"
-#include "ucs.h"
+#include "deque.h"
+#include "heap.h"
 #include <string.h>
 
 struct Graph
@@ -41,25 +40,25 @@ Graph * graph_construct(FILE * file){
     }
 
     if(!strcmp(g->algorithm, "DFS")){
-        g->border = dfs_construct();
-        g->border_push = dfs_push;
-        g->border_pop = dfs_pop;
-        g->border_size = dfs_size;
-        g->border_destroy = dfs_destroy;
+        g->border = deque_construct();
+        g->border_push = deque_push_back;
+        g->border_pop = deque_pop_back;
+        g->border_size = deque_size;
+        g->border_destroy = deque_destroy;
     } 
     if(!strcmp(g->algorithm, "BFS")){
-        g->border = bfs_construct();
-        g->border_push = bfs_push;
-        g->border_pop = bfs_pop;
-        g->border_size = bfs_size;
-        g->border_destroy = bfs_destroy;
+        g->border = deque_construct();
+        g->border_push = deque_push_back;
+        g->border_pop = deque_pop_front;
+        g->border_size = deque_size;
+        g->border_destroy = deque_destroy;
     }
     if(!strcmp(g->algorithm, "UCS")){
-        g->border = ucs_construct(city_cmp);
-        g->border_push = ucs_push;
-        g->border_pop = ucs_pop;
-        g->border_size = ucs_size;
-        g->border_destroy = ucs_destroy;
+        g->border = heap_constructor(city_cmp);
+        g->border_push = heap_push;
+        g->border_pop = heap_pop;
+        g->border_size = heap_size;
+        g->border_destroy = heap_destroy;
     }
     
     return g;
