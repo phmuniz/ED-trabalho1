@@ -5,20 +5,24 @@
 
 struct Neighbor{
     int idx;
-    int dist;
+    float dist;
 };
 
 Neighbor * neighbor_construct(FILE * file){
 
     Neighbor * n = (Neighbor*)calloc(1, sizeof(Neighbor));
 
-    fscanf(file, "%d %d", &n->idx, &n->dist);
+    fscanf(file, "%d %f", &n->idx, &n->dist);
 
     return n;
 }
 
 int neighbor_idx(Neighbor * n){
     return n->idx;
+}
+
+float neighbor_distance(Neighbor * n){
+    return n->dist;
 }
 
 void neighbor_destroy(Neighbor * n){
@@ -28,5 +32,5 @@ void neighbor_destroy(Neighbor * n){
 void neighbor_print(Neighbor * n){
 
     printf("IDX_NEIGHBOR: %d\n", n->idx);
-    printf("DISTANCE_TO_ORIGIN: %d\n", n->dist);
+    printf("DISTANCE_TO_ORIGIN: %.2f\n", n->dist);
 }

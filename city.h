@@ -7,7 +7,7 @@
 
 typedef struct City City;
 
-City * city_construct(FILE * file);
+City * city_construct(FILE * file, int idx);
 
 char * city_name(City * c);
 
@@ -22,6 +22,14 @@ int city_num_neighbors(City * c);
 int city_get_dad(City * c);
 
 void city_set_dad(City * c, int idx);
+
+float city_get_dist_to_origin(City * c);
+
+void city_set_dist_to_origin(City * c, float dist);
+
+int city_get_in_border(City * c);
+
+void city_set_in_border(City * c);
 
 Neighbor * city_get_neighbor(City * c, int idx);
 

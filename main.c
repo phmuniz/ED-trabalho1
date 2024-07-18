@@ -5,7 +5,11 @@
 
 int main(){
 
-    FILE * file = fopen("entrada.txt", "r");
+    char path[100];
+
+    scanf("%s", path);
+
+    FILE * file = fopen(path, "r");
 
     Graph * g = graph_construct(file);
 

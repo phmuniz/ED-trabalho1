@@ -8,23 +8,26 @@ struct City
 {
     int idx;
     char name[30];
-    int x;
-    int y;
+    float x;
+    float y;
     Vector * neighbors;
     int visited;
+    int in_border;
     int dad_city;
-    int dist_to_origin;
+    float dist_to_origin;
 };
 
-City * city_construct(FILE * file){
+City * city_construct(FILE * file, int idx){
 
     City * c = (City*)calloc(1, sizeof(City));
 
     c->neighbors = vector_construct();
 
-    int num_neighbors;
+    int num_neighbors = 0;
 
-    fscanf(file, "%d %s %d %d %d", &c->idx, c->name, &c->x, &c->y, &num_neighbors);
+    c->idx = idx;
+
+    fscanf(file, "%s %f %f %d", c->name, &c->x, &c->y, &num_neighbors);
 
     for (int j = 0; j < num_neighbors; j++)
     {
@@ -33,6 +36,22 @@ City * city_construct(FILE * file){
     }
 
     return c;
+}
+
+float city_get_dist_to_origin(City * c){
+    return c->dist_to_origin;
+}
+
+void city_set_dist_to_origin(City * c, float dist){
+    c->dist_to_origin = dist;
+}
+
+int city_get_in_border(City * c){
+    return c->in_border;
+}
+
+void city_set_in_border(City * c){
+    c->in_border = 1;
 }
 
 char * city_name(City * c){
@@ -85,9 +104,9 @@ void city_print(City * c){
     printf("IDX_CITY: %d\n", c->idx);
     printf("NAME_CITY: %s\n", c->name);
     printf("VISITED_CITY: %d\n", c->visited);
-    printf("DIST_TO_ORIGIN_CITY: %d\n", c->dist_to_origin);
+    printf("DIST_TO_ORIGIN_CITY: %.2f\n", c->dist_to_origin);
     printf("DAD_CITY: %d\n", c->dad_city);
-    printf("POSITION_CITY: %d %d\n\n", c->x, c->y);
+    printf("POSITION_CITY: %.2f %.2f\n\n", c->x, c->y);
 
     for (int i = 0; i < vector_size(c->neighbors); i++)
     {

@@ -9,7 +9,7 @@ Neighbor * neighbor_construct(FILE * file);
 
 int neighbor_idx(Neighbor * n);
 
-int neighbor_distance(Neighbor * n);
+float neighbor_distance(Neighbor * n);
 
 void neighbor_destroy(Neighbor * n);
 
