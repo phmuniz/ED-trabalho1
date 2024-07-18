@@ -31,10 +31,14 @@ int city_get_in_border(City * c);
 
 void city_set_in_border(City * c);
 
+void city_reset_in_border(City * c);
+
 Neighbor * city_get_neighbor(City * c, int idx);
 
 void city_destroy(City * c);
 
 void city_print(City * c);
+
+int city_cmp(const void *a, const void *b);
 
 #endif

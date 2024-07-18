@@ -54,6 +54,10 @@ void city_set_in_border(City * c){
     c->in_border = 1;
 }
 
+void city_reset_in_border(City * c){
+    c->in_border = 0;
+}
+
 char * city_name(City * c){
     return c->name;
 }
@@ -114,4 +118,17 @@ void city_print(City * c){
         neighbor_print(vector_get(c->neighbors, i));
         printf("\n");
     }
+}
+
+int city_cmp(const void *a, const void *b)
+{
+    City *city_a = (City *)a;
+    City *city_b = (City *)b;
+
+    if (city_a->dist_to_origin < city_b->dist_to_origin)
+        return 1;
+    if (city_a->dist_to_origin > city_b->dist_to_origin)
+        return -1;
+
+    return 0;
 }
